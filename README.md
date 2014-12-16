@@ -27,4 +27,3 @@ c.get('a_key') # got nothing
 
 c.get('another_key', default='another_value') # if key is not available sets default value
 ```
-
