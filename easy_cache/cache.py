@@ -31,7 +31,7 @@ class EasyCache(object):
                 for item in range(0 , num_items_to_remove - 1):
                     self.remove(sorted_cache.items()[0][0])
 
-    def get(self, key):
+    def get(self, key, default=None):
         try:
             eviction, value, hits, used = self._cache[key]
 
@@ -41,6 +41,9 @@ class EasyCache(object):
             else:
                 return value
         except KeyError:
+            if default:
+                self.set(key, default)
+                return default
             return None
 
     def set(self, key, value, timeout=None):
