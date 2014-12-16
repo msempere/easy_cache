@@ -3,13 +3,18 @@ easy_cache
 
 Easy memory cache for single-threaded environments
 
-**Supported replacement policies:**
+## Install
+```
+python setup.py install
+```
+
+## Supported replacement policies
 - LRU (Least Recently Used)
 - MRU (Most Recently Used)
 - RR (Random Replacement)
 - LFU (Least-Frequently Used)
 
-**Usage example:**
+## Usage example
 
 ```python
 from easy_cache.cache import EasyCache
