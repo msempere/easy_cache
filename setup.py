@@ -8,4 +8,5 @@ setup(name='easy_cache',
       author_email='msempere@users.noreply.github.com',
       license='MIT',
       packages=['easy_cache'],
+      test_suite="tests",
       zip_safe=False)
