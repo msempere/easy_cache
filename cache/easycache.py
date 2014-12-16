@@ -12,7 +12,7 @@ class EasyCache(object):
 
     def __init__(self, capacity=100, timeout=180, algorith=Algorith.LRU):
         self.capacity = capacity
-        self.timeout = 180
+        self.timeout = timeout
         self.algorith = algorith
         self._cache = {}
 
