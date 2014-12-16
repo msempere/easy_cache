@@ -1,7 +1,7 @@
 easy_cache
 ==========
 
-Easy emory cache for single-threaded environments
+Easy memory cache for single-threaded environments
 
 Usage example:
 
