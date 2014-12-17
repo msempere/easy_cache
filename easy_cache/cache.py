@@ -46,6 +46,8 @@ class EasyCache(object):
     def remove(self, key):
         return self._cache.pop(key, None) is not None
 
+    def clear(self):
+        self._cache.clear()
 
     def _purge(self):
         if len(self._cache) >= self.capacity:

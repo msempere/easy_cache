@@ -75,6 +75,16 @@ class TestCache(TestCase):
         assert c.get('a_key') == 'a_value'
         assert c.get('b_key') == 'b_value'
 
+    def test_clear_cache(self):
+        c = EasyCache(3, algorithm = Algorithm.LFU)
+        c.set('a_key', 'a_value')
+        c.set('b_key', 'b_value')
+        c.set('c_key', 'c_value')
+        c.clear()
+        assert c.get('a_key') == None
+        assert c.get('b_key') == None
+        assert c.get('c_key') == None
+
 
 
 
