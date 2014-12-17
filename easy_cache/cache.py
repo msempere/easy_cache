@@ -28,7 +28,7 @@ class EasyCache(object):
             return False
 
 
-    def _purgue(self):
+    def _purge(self):
         if len(self._cache) >= self.capacity:
             num_items_to_remove = 1 + ( len(self._cache) - self.capacity )
 
@@ -75,7 +75,7 @@ class EasyCache(object):
                 _eviction, _value, _hits, _used = self._cache[key]
                 self._cache[key] = (_eviction, value, _hits + 1, time())
             else:
-                self._purgue()
+                self._purge()
                 self._cache[key] = (time() + timeout, value, HITS_DEFAULT, time())
             return True
         except:
