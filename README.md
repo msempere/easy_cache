@@ -23,7 +23,7 @@ c = EasyCache(capacity = 10, algorith = Algorith.LRU)
 c.set('a_key', 'a_value', timeout = 3*60)
 c.get('a_key') # got 'a_value'
 c.get('a_key') # got 'a_value'
-c.get('a_key') # got nothing
+c.get('a_key') # got None after 3*60 seconds
 
 c.get('another_key', default='another_value') # if key is not available sets default value
 ```
