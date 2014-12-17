@@ -20,12 +20,7 @@ class EasyCache(object):
 
 
     def remove(self, key):
-        try:
-            self._cache = dict(self._cache)
-            del self._cache[key]
-            return True
-        except:
-            return False
+        return self._cache.pop(key, None) is not None
 
 
     def _purge(self):
