@@ -1,3 +1,22 @@
+"""
+    easy_cache
+    ----------
+    Easy key-value cache for single-threaded environments.
+
+    Usage example:
+    =============
+
+    >>> from easy_cache.cache import EasyCache, Algorithm
+    >>> c = EasyCache(capacity = 10, algorith = Algorithm.LRU)
+    >>> c.set('a_key', 'a_value', timeout = 3*60)
+    >>> c.get('a_key')
+    'a_value'
+    >>> c.get('a_key')
+    'a_value'
+    >>> c.get('a_key')
+    >>>
+"""
+
 from time import time
 from random import randrange
 
@@ -11,6 +30,11 @@ class Algorithm(object):
 
 
 class EasyCache(object):
+    """Easy key-value cache for single-threaded environments.
+    :param capacity: maximum number if items to store before start deleting following the replacement policy
+    :param timeout: default timeout to apply if timeout is not set when storing keys
+    :param algorithm: replacement policy to use when the capacity is reached
+    """
 
     def __init__(self, capacity=100, timeout=180, algorithm=Algorithm.LRU):
         self.capacity = capacity
