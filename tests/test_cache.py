@@ -1,4 +1,4 @@
-from time import sleep
+from time import sleep, time
 from easy_cache.cache import EasyCache
 from easy_cache.cache import Algorithm
 from unittest import TestCase
@@ -84,6 +84,33 @@ class TestCache(TestCase):
         assert c.get('a_key') == None
         assert c.get('b_key') == None
         assert c.get('c_key') == None
+
+    def test_cache_memoize(self):
+        c = EasyCache()
+
+        @c.cached()
+        def foo():
+            return time()
+
+        result_1 = foo()
+        sleep(0.1)
+        result_2 = foo()
+        assert result_1 == result_2
+
+    def test_cache_memoize_with_timeout(self):
+        c = EasyCache(timeout=0.5)
+
+        @c.cached()
+        def foo():
+            return time()
+
+        result_1 = foo()
+        sleep(0.1)
+        result_2 = foo()
+        assert result_1 == result_2
+        sleep(0.5)
+        result_3 = foo()
+        assert result_3 != result_1
 
 
 
