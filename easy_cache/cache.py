@@ -17,8 +17,11 @@
     >>>
 """
 
+import inspect
+from hashlib import md5
 from time import time
 from random import randrange
+from functools import wraps
 
 HITS_DEFAULT = 0
 
@@ -101,3 +104,51 @@ class EasyCache(object):
             return True
         except:
             return False
+
+
+    def _generate_md5_key(self, f, alter_name=None):
+        name = alter_name if alter_name else f.__name__
+        name = '{_name}:{i_args}'.format(_name=name, i_args=str(inspect.getargspec(f)))
+        m = md5()
+        m.update(name)
+        return m.digest()
+
+
+    def cached(self, timeout=None, alter_name=None):
+        def cache_decorator(f):
+            @wraps(f)
+            def wrapper(*args, **kwds):
+                key = self._generate_md5_key(f, alter_name)
+                value = self.get(key)
+
+                if value:
+                    return value
+                else:
+                    f_value = f(*args, **kwds)
+                    self.set(key, f_value)
+                    return f_value
+            return wrapper
+        return cache_decorator
+
+def main():
+    from time import time, sleep
+    c = EasyCache()
+
+    @c.cached()
+    def foo():
+        return time()
+
+    @c.cached()
+    def foo_b():
+        return time()
+
+    print foo()
+    print foo()
+    sleep(2)
+    print foo_b()
+    print foo_b()
+    print foo()
+
+
+if __name__ == '__main__':
+    main()
