@@ -22,6 +22,7 @@ from hashlib import md5
 from time import time
 from random import randrange
 from functools import wraps
+from collections import OrderedDict
 
 HITS_DEFAULT = 0
 
@@ -106,19 +107,40 @@ class EasyCache(object):
             return False
 
 
-    def _generate_md5_key(self, f, alter_name=None):
+    def _generate_md5_key(self, f, attr, corrected_args, alter_name=None):
         name = alter_name if alter_name else f.__name__
-        name = '{_name}:{i_args}'.format(_name=name, i_args=str(inspect.getargspec(f)))
+        name = '{_name}:{_corrected_args}:{_attr}'.format(_name=name, _corrected_args=corrected_args, _attr=attr)
         m = md5()
         m.update(name)
         return m.digest()
+
+
+    def _generate_args(self, attr, args, argspec, kwds):
+        corrected_args = OrderedDict()
+        contains_self = False
+
+        for i in range(0, len(argspec.args)):
+            if argspec.args[i] != 'self':
+                corrected_args[argspec.args[i]] = kwds.get(argspec.args[i], argspec.defaults[i-1 if contains_self else i])
+                if i < len(args):
+                    corrected_args[argspec.args[i]] = args[i]
+            else:
+                contains_self = True
+        return corrected_args
 
 
     def cached(self, timeout=None, alter_name=None):
         def cache_decorator(f):
             @wraps(f)
             def wrapper(*args, **kwds):
-                key = self._generate_md5_key(f, alter_name)
+                attr = None
+                try:
+                    attr = getattr(args[0], f.__name__, None)
+                except:
+                    pass
+                argspec = inspect.getargspec(f)
+                corrected_args = self._generate_args(attr, args, argspec, kwds)
+                key = self._generate_md5_key(f, attr, corrected_args, alter_name)
                 value = self.get(key)
 
                 if value:
@@ -130,25 +152,3 @@ class EasyCache(object):
             return wrapper
         return cache_decorator
 
-def main():
-    from time import time, sleep
-    c = EasyCache()
-
-    @c.cached()
-    def foo():
-        return time()
-
-    @c.cached()
-    def foo_b():
-        return time()
-
-    print foo()
-    print foo()
-    sleep(2)
-    print foo_b()
-    print foo_b()
-    print foo()
-
-
-if __name__ == '__main__':
-    main()
