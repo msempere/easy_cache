@@ -28,3 +28,20 @@ c.get('a_key') # got None after 3*60 seconds
 c.get('another_key', default='another_value') # if key is not available sets default value
 ```
 
+## Memoization
+
+```python
+from easy_cache.cache import EasyCache
+
+cache = EasyCache(timeout = 10) # memoize for 10 seconds
+
+cache.cached()
+def foo()
+  return time()
+  
+foo() got # 1419007127.181711
+foo() got # 1419007127.181711
+foo() got # 1419007127.181711
+```
+
+
