@@ -97,6 +97,26 @@ class TestCache(TestCase):
         result_2 = foo()
         assert result_1 == result_2
 
+    def test_cache_class_type(self):
+        c = EasyCache(timeout=0.5)
+
+        class A(object):
+            value = "a_value"
+
+        c.set('a_key', A)
+        assert c.get('a_key').value == "a_value"
+
+    def test_cache_class_different_type(self):
+        c = EasyCache(timeout=0.5)
+
+        class A(object):
+            value = "a_value"
+
+        c.set('a_key', A)
+        c.set('b_key', 1)
+        assert c.get('a_key').value == "a_value"
+        assert c.get('b_key') == 1
+
     def test_cache_memoize_with_timeout(self):
         c = EasyCache(timeout=0.5)
 
@@ -112,8 +132,66 @@ class TestCache(TestCase):
         result_3 = foo()
         assert result_3 != result_1
 
+    def test_cache_memoize_with_parameters(self):
+        c = EasyCache()
 
+        @c.cached()
+        def foo(a=1, b=2):
+            return time()
 
+        assert foo(1,2) == foo(1) == foo() == foo(b=2) == foo(a=1) == foo(a=1, b=2)
+        assert foo(1,2) != foo(2,1)
 
+    def test_cache_memoize_with_different_classes(self):
+        c = EasyCache()
+        class A(object):
+            @c.cached()
+            def foo(self):
+                return 'A'
 
+        class B(object):
+            @c.cached()
+            def foo(self):
+                return 'B'
+        a = A()
+        b = B()
+        assert a.foo() != b.foo() and a.foo() != b.foo()
+        assert a.foo() == 'A' and b.foo() == 'B'
+
+    def test_cache_memoize_with_same_class_different_instance(self):
+        c = EasyCache()
+        class A(object):
+            def __init__(self):
+                self.i = 0
+
+            @c.cached()
+            def get(self):
+                return self.i
+
+        a = A()
+        b = A()
+        a.i = 2
+        b.i = 1
+        assert a.get() == 2 and b.get() == 1
+        a.i = 1
+        b.i = 2
+        assert a.get() == 2 and b.get() == 1
+
+    def test_cache_memoize_with_same_class_different_instance_and_default_parameters(self):
+        c = EasyCache()
+        class A(object):
+            def __init__(self):
+                self.i = 0
+
+            @c.cached()
+            def get(self, a=1, b=5):
+                return a + self.i
+
+        a = A()
+        b = A()
+        a.i = 1
+        b.i = 2
+
+        assert a.get() == 2 and b.get() == 3
+        assert a.get(1, 5) == 2 and a.get(1) == 2 and a.get(b=5, a=1) == 2 and b.get(1) == 3 and b.get(a=1, b=5) == 3
 
