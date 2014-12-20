@@ -26,6 +26,7 @@ c.get('a_key') # got 'a_value'
 c.get('a_key') # got None after 3*60 seconds
 
 c.get('another_key', default='another_value') # if key is not available sets default value
+c.get('another_key') # got 'another_value'
 ```
 
 ## Memoization example
