@@ -1,7 +1,7 @@
 # easy_cache [![Build Status](https://travis-ci.org/msempere/easy_cache.svg?branch=master)] (http://travis-ci.org/msempere/easy_cache)
 
 
-Easy memory cache for single-threaded environments
+Easy in-memory key-value cache for single-threaded environments
 
 ## Install
 ```
