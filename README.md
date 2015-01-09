@@ -1,10 +1,9 @@
 ![Logo](http://i.imgur.com/HDXDpCo.png)
 
+Easy in-memory key-value cache for single-threaded environments
+
 ## Versions:
 * master [![Build Status](https://travis-ci.org/msempere/easy_cache.svg?branch=master)](https://travis-ci.org/msempere/easy_cache.svg?branch=master) 
-
-
-Easy in-memory key-value cache for single-threaded environments
 
 ## Install
 ```
