@@ -1,7 +1,5 @@
 ![Logo](http://i.imgur.com/HDXDpCo.png)
 
-# easy_cache [![Build Status](https://travis-ci.org/msempere/easy_cache.svg?branch=master)] (http://travis-ci.org/msempere/easy_cache)
-
 ## Versions:
 * master [![Build Status](https://travis-ci.org/msempere/easy_cache.svg?branch=master)](https://travis-ci.org/msempere/easy_cache.svg?branch=master) 
 
